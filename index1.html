@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    	<meta charset="utf-8">
+    	<meta name="description" content="Your description goes here">
+    	<meta name="keywords" content="one, two, three">
+
+		<title>Blank Template</title>
+
+		<!-- external CSS link -->
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<section id="player-section">
+			<h1>Welcome to Shinobu's BattleField</h1>
+			<input type="text" id="person1" placeholder="Enter Player 1">
+			<input type="text" id="person2" placeholder="Enter Player 2">
+			<button id="engage-btn">Engage</button>
+		  </section>
+		<div class="container">
+			<h1 id="currentTurn"></h1>
+		  <div class="grid-container" id="grid-container">
+			<!-- Left column -->
+			<div class="grid-column" id="left-column">
+				<div class="grid-item">
+				  <button class="p1-btn1" id="player1-buttons">Mothership</button>
+				</div>
+				<div class="grid-item" id="player1-buttons">
+				  <button class="ship-button" id="p1-J1">Juggernaut 1</button>
+				  <button class="ship-button" id="p1-J2">Juggernaut 2</button>
+				  <button class="ship-button" id="p1-J3">Juggernaut 3</button>
+				  <button class="ship-button" id="p1-J4">Juggernaut 4</button>
+				</div>
+				<div class="grid-item">
+				  <div class="nested-grid" id="player1-buttons"> <!-- Added ID for player 1's buttons -->
+					<button class="ship-button" id="p1-L1">Lightcruiser 1</button>
+					<button class="ship-button" id="p1-L2">Lightcruiser 2</button>
+					<button class="ship-button" id="p1-L3">Lightcruiser 3</button>
+					<button class="ship-button" id="p1-L4">Lightcruiser 4</button>
+					<button class="ship-button" id="p1-L5">Lightcruiser 5</button>
+					<button class="ship-button" id="p1-L6">Lightcruiser 6</button>
+					<button class="ship-button" id="p1-L7">Lightcruiser 7</button>
+					<button class="ship-button" id="p1-L8">Lightcruiser 8</button>
+				  </div>
+				</div>
+				  <!-- Div for displaying action info for Player 1 -->
+				  <div class="grid-item" id="player1-action-info">
+					<p id="player1-info">Actions and results will be displayed here for Player 1.</p>
+				  </div>
+			  </div>
+			  <!-- Right column -->
+			  <div class="grid-column" id="right-column">
+				<div class="grid-item">
+				  <button class="p2-btn1" id="player2-buttons">Mothership</button>
+				</div>
+				<div class="grid-item" id="player2-buttons">
+				  <button class="ship-button" id="p2-J1">Juggernaut 1</button>
+				  <button class="ship-button" id="p2-J2">Juggernaut 2</button>
+				  <button class="ship-button" id="p2-J3">Juggernaut 3</button>
+				  <button class="ship-button" id="p2-J4">Juggernaut 4</button>
+				</div>
+				<div class="grid-item">
+				  <div class="nested-grid" id="player2-buttons">
+					<button class="ship-button" id="p2-L1">Lightcruiser 1</button>
+					<button class="ship-button" id="p2-L2">Lightcruiser 2</button>
+					<button class="ship-button" id="p2-L3">Lightcruiser 3</button>
+					<button class="ship-button" id="p2-L4">Lightcruiser 4</button>
+					<button class="ship-button" id="p2-L5">Lightcruiser 5</button>
+					<button class="ship-button" id="p2-L6">Lightcruiser 6</button>
+					<button class="ship-button" id="p2-L7">Lightcruiser 7</button>
+					<button class="ship-button" id="p2-L8">Lightcruiser 8</button>
+				  </div>
+				</div>
+				<!-- Div for displaying action info for Player 2 -->
+				<div class="grid-item" id="player2-action-info">
+					<p id="player2-info"></p>
+				  </div>
+			   </div>
+			</div>
+			<!-- <h2 id="subShip2-results"></h2>
+			<h2 id="mainShip-results"></h2>
+			<h2 id="subShip-results"></h2> -->
+		</div>
+		<script type="text/javascript" src="js/main.js"></script>
+	</body>
+</html>
+ 

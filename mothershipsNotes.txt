@@ -1,0 +1,14 @@
+				MOTHERSHIP NOTES REFORMED
+
+1. Redo html css layout
+	-Description
+	   1. Once engage button is input, unhide certain aspects of the code and
+	      hide the all aspects of the introduction/initation page
+	   2. Made the unhidden code turn into a 3 row layout with 1 main button(the 	      mothership) 4 buttons each representing the juggernauts, and 8 buttons 	      representing the cruisers. Copy this layout to be on both sides 		      representing the players
+
+2. Create TURN based system using loops and if statements
+	-Description
+	   1. Coin flip, decides who goes first 
+	   2. Display hp of all ships underthen and then flash the color red if its 	      a missed attack and green if a guaranteed. For cruisers it'll turn 	      navy blue
+	   3. When a ship is destroyed, the button will turn gray with an red X
+	   4. To win the loop for the turn system will end when the mothership and a 	      fleet is all in gray. 

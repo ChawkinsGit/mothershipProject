@@ -1,0 +1,133 @@
+/* Box Model Hack */
+* {
+    box-sizing: border-box;
+}
+
+/* Clear fix hack */
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+.clear {
+   clear: both;
+}
+
+/******************************************
+/* BASE STYLES
+/*******************************************/
+
+
+section{
+    display: flex;
+    justify-content: center;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+input{
+    margin: 1%;
+}
+/******************************************
+/* LAYOUT
+/*******************************************/
+
+ 
+body {
+ font-family: Arial, sans-serif;
+ margin: 0;
+ padding: 0;
+ background-color: #f4f4f4; /* Background color for the body */
+ display: flex;
+ justify-content: center; /* Center horizontally */
+ align-items: center; /* Center vertically */
+ height: 100vh; /* Make the body take up the full viewport height */
+}
+
+.grid-container {
+ display: none; /* Initially hide the grid container */
+ justify-content: space-around; /* Even spacing between columns */
+ padding: 20px; /* Increased padding */
+ text-align: center; /* Center the content */
+ background-color: #fff; /* Background color for the grid container */
+ border-radius: 10px; /* Rounded corners for the grid container */
+ box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Box shadow for the grid container */
+}
+
+.grid-column {
+ display: flex;
+ flex-direction: column;
+ margin: 0 20px;
+}
+
+.grid-item {
+ background-color: #f0f0f0; /* Background color for grid items */
+ border: 1px solid #ddd; /* Border for grid items */
+ padding: 12px; /* Increased padding */
+ text-align: center;
+ margin-bottom: 30px; /* Increased spacing between rows */
+ border-radius: 8px; /* Rounded corners for grid items */
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for grid items */
+}
+
+#player1-action-info, #player2-action-info {
+ background-color: #e8f4ff;
+ padding: 10px;
+ border: 1px solid #ccc;
+ border-radius: 8px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ font-size: 14px;
+ min-height: 50px; /* Ensures a minimum height for the info boxes */
+ text-align: left;
+}
+
+.nested-grid {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr); /* 4 columns with equal width */
+ grid-gap: 10px; /* Increased gap between grid items */
+}
+
+button {
+ background-color: #f0f0f0; /* Background color for buttons */
+ border: none;
+ padding: 7px 15px; /* Padding for buttons */
+ font-size: 16px;
+ cursor: pointer;
+ border-radius: 6px; /* Rounded corners for buttons */
+ transition: background-color 0.3s ease; /* Smooth transition for button hover */
+}
+.container {
+ display: flex;
+ flex-direction: column;
+}
+
+#currentTurn{
+ display: none;
+ width: 100%;
+ margin-top: 20px;
+ padding: 10px;
+ border-radius: 5px;
+ text-align: center;
+}
+
+#subShip-results, #mainShip-results, #subShip2-results{
+ display: none;
+ width: 100%;
+ margin-top: 10px;
+ padding: 5px;
+ border-radius: 5px;
+ text-align: center;
+ clear: both; /* Ensure the box appears below other floated elements */
+}
+
+button:hover {
+ background-color: #e0e0e0; /* Background color on hover */
+}
+
+
+/******************************************
+/* ADDITIONAL STYLES
+*****************************************

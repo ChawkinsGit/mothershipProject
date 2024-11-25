@@ -1,0 +1,58 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #222;
+  color: #fff;
+}
+
+#game {
+  display: flex;
+  gap: 20px;
+  text-align: center;
+}
+
+#player1, #player2 {
+  padding: 10px;
+  background-color: #333;
+  border-radius: 10px;
+  width: 200px;
+}
+
+.ship {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+#targetSelection {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+}
+
+.targetBtn {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+#status {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turn-Based Space Battle</title>
+<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div id="game">
+        <div id="player1">
+            <h2>Player 1</h2>
+            <button class="ship" id="p1Mothership">Mothership (HP: <span id="p1MothershipHp">1000</span>)</button>
+            <button class="ship" id="p1Lightships">Lightships (HP: <span id="p1LightHp">600</span>)</button>
+            <button class="ship" id="p1Heavyships">Heavyships (HP: <span id="p1HeavyHp">600</span>)</button>
+        </div>
+
+        <div id="player2">
+            <h2>Player 2</h2>
+            <button class="ship" id="p2Mothership">Mothership (HP: <span id="p2MothershipHp">1000</span>)</button>
+            <button class="ship" id="p2Lightships">Lightships (HP: <span id="p2LightHp">600</span>)</button>
+            <button class="ship" id="p2Heavyships">Heavyships (HP: <span id="p2HeavyHp">600</span>)</button>
+        </div>
+
+        <div id="targetSelection">
+            <h3>Select Enemy Target</h3>
+            <button class="targetBtn" id="targetLightship">Target Enemy Lightships</button>
+            <button class="targetBtn" id="targetHeavyship">Target Enemy Heavyships</button>
+        </div>
+
+        <div id="status">
+            <h3>Game Status</h3>
+            <p id="turnInfo">Turn: <span id="turnIndicator"></span></p>
+            <p id="attackLog"></p>
+            <p id="gameEndMessage"></p>
+        </div>
+    </div>
+	<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
