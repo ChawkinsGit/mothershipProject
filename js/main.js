@@ -10,8 +10,10 @@ class Ship {
         const hitChance = 1 - (opponentSpeed * 0.066) - 0.15
         if(Math.random() < hitChance) {
             this.hp = Math.max(this.hp - damage, 0);
+        return 'hit';
+        } else{
+            return 'miss'
         }
-        return this.hp <= 0;
     }
 }
 
@@ -31,9 +33,10 @@ class LightShip extends Ship {
 
     takeDamage(damage, opponentSpeed) {
         if (!this.evade(opponentSpeed)) {
-            super.takeDamage(damage);
+            return 'evaded'
+        } else{
+            return super.takeDamage(damage, opponentSpeed);
         }
-        return this.hp <= 0;
     }
 }
 
@@ -79,10 +82,24 @@ class Game {
         document.getElementById("turnIndicator").textContent = this.currentPlayer.name;
     }
 
-    logAttack(attacker, target, damage) {
+    // logAttack(attacker, target, damage) {
+    //     const attackLog = document.getElementById("attackLog");
+    //     const log = document.createElement("div");
+    //     log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
+    //     attackLog.appendChild(log);
+    // }
+    logAttack(attacker, target, damage, result) {
         const attackLog = document.getElementById("attackLog");
         const log = document.createElement("div");
-        log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
+
+        if (result === "hit") {
+            log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
+        } else if (result === "miss") {
+            log.textContent = `${attacker.name} attacked ${target.name}, but missed!`;
+        } else if (result === "evaded") {
+            log.textContent = `${attacker.name} attacked ${target.name}, but the attack was evaded!`;
+        }
+
         attackLog.appendChild(log);
     }
 
@@ -104,20 +121,21 @@ class Game {
         return false;
     }
 
-    mothershipAttackPhase(opponent) {
+    mothershipAttackPhase(opponent, targetShip) {
         // Clear log before appending new sequence
         this.clearLog();
         
         // Log both mothership attacks
+        const attackResult = targetShip.takeDamage(damage, attacker.speed)
         const attacker = this.currentPlayer.mothership;
         const defender = opponent.mothership;
-        this.logAttack(attacker, defender, attacker.attackPower);
+        this.logAttack(attacker, defender, attacker.attackPower, attackResult);
         defender.takeDamage(attacker.attackPower, attacker.speed);
         
         if (this.checkWinCondition()) return;
 
         const randomTarget = opponent.randomShip;
-        this.logAttack(attacker, randomTarget, attacker.attackPower);
+        this.logAttack(attacker, randomTarget, attacker.attackPower, attackResult);
         randomTarget.takeDamage(attacker.attackPower, attacker.speed);
 
         // Log pending attack from selected ship, if any
@@ -209,6 +227,7 @@ class Game {
         console.log("Attacker:", attacker);
         console.log("Damage:", damage);
     
+        const attackResult = targetShip.takeDamage(damage, attacker.speed)
         if (!attacker || damage === null) {
             alert(`Selected attacker (${this.selectedPlayerShip}) is invalid!`);
             return;
@@ -222,7 +241,7 @@ class Game {
     
         // Add the log of the selected attack to the pending logs
         this.pendingLogs.push(() => {
-            this.logAttack(attacker, targetShip, damage);
+            this.logAttack(attacker, targetShip, damage, attackResult);
         });
     
         if (this.checkWinCondition()) return;
