@@ -121,22 +121,22 @@ class Game {
         return false;
     }
 
-    mothershipAttackPhase(opponent, targetShip) {
+    mothershipAttackPhase(opponent) {
         // Clear log before appending new sequence
         this.clearLog();
         
         // Log both mothership attacks
-        const attackResult = targetShip.takeDamage(damage, attacker.speed)
         const attacker = this.currentPlayer.mothership;
         const defender = opponent.mothership;
-        this.logAttack(attacker, defender, attacker.attackPower, attackResult);
-        defender.takeDamage(attacker.attackPower, attacker.speed);
+        const mothershipAttackResult = defender.takeDamage(attacker.attackPower, attacker.speed)
+        this.logAttack(attacker, defender, attacker.attackPower, mothershipAttackResult);
         
         if (this.checkWinCondition()) return;
 
         const randomTarget = opponent.randomShip;
-        this.logAttack(attacker, randomTarget, attacker.attackPower, attackResult);
-        randomTarget.takeDamage(attacker.attackPower, attacker.speed);
+        const randomTargetAttackResult = randomTarget.takeDamage(attacker.attackPower, attacker.speed);
+        this.logAttack(attacker, randomTarget, attacker.attackPower, randomTargetAttackResult);
+        
 
         // Log pending attack from selected ship, if any
         if (this.pendingLogs.length > 0) {
