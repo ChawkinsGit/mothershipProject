@@ -10,10 +10,18 @@ class Ship {
         const hitChance = 1 - (opponentSpeed * 0.066) - 0.15
         if(Math.random() < hitChance) {
             this.hp = Math.max(this.hp - damage, 0);
+           
+         if(!this.isAlive()) { 
+            return `${this.name} has been destroyed`
+            
+        } 
         return 'hit';
         } else{
             return 'miss'
         }
+    }
+    isAlive(){
+        return this.hp > 0
     }
 }
 
@@ -92,13 +100,17 @@ class Game {
         const attackLog = document.getElementById("attackLog");
         const log = document.createElement("div");
 
-        if (result === "hit") {
-            log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
-        } else if (result === "miss") {
-            log.textContent = `${attacker.name} attacked ${target.name}, but missed!`;
-        } else if (result === "evaded") {
+        if (result === 'miss') {
+            log.textContent = `${attacker.name} attacked ${target.name} but missed!`;
+        }else if (result === "evaded") {
             log.textContent = `${attacker.name} attacked ${target.name}, but the attack was evaded!`;
+        } else if (result === 'hit') {
+            log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
+        } else {
+            // When the target is destroyed
+            log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage! ${result}`;
         }
+        
 
         attackLog.appendChild(log);
     }
@@ -165,39 +177,6 @@ class Game {
         }
     }
 
-    // selectTarget(targetType) {
-    //     if (!this.selectedPlayerShip) {
-    //         alert("Please select one of your ships to attack with first!");
-    //         return;
-    //     }
-    
-    //     this.selectedTarget = targetType;
-    //     const opponent = this.currentPlayer === this.player1 ? this.player2 : this.player1;
-    //     const targetShip = targetType === "lightships" ? opponent.lightships : opponent.heavyships;
-    //     const damage = this.currentPlayer[this.selectedPlayerShip].attackPower;
-    
-    //     // Handle the attack logic
-    //     if (targetShip instanceof LightShip) {
-    //         targetShip.takeDamage(damage, this.currentPlayer[this.selectedPlayerShip].speed, this.selectPlayerShip.speed);
-    //     } else {
-    //         targetShip.takeDamage(damage, this.selectPlayerShip.speed);
-    //     }
-    
-    //     // Add the log of the selected attack to the pending logs
-    //     this.pendingLogs.push(() => {
-    //         console.log("Storing pending attack log:", this.currentPlayer[this.selectedPlayerShip].name, "to", targetShip.name)
-    //         this.logAttack(this.currentPlayer[this.selectedPlayerShip], targetShip, damage);
-    //     });
-    
-    //     if (this.checkWinCondition()) return;
-    
-    //     // Reset selection
-    //     this.selectedPlayerShip = null;
-    //     this.selectedTarget = null;
-    
-    //     // Switch turn to the next player
-    //     this.switchTurn();
-    // }
     selectTarget(targetType) {
         if (!this.selectedPlayerShip) {
             alert("Please select one of your ships to attack with first!");
