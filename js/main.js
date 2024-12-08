@@ -4,6 +4,7 @@ class Ship {
         this.hp = hp;
         this.attackPower = attackPower;
         this.speed = speed
+        this.destroyed = false
     }
 
     takeDamage(damage, opponentSpeed) {
@@ -11,10 +12,11 @@ class Ship {
         if(Math.random() < hitChance) {
             this.hp = Math.max(this.hp - damage, 0);
            
-         if(!this.isAlive()) { 
-            return `${this.name} has been destroyed`
-            
-        } 
+            if (!this.isAlive() && !this.destroyed) {
+                this.destroyed = true; // Mark the ship as destroyed
+                return `${this.name} has been destroyed`;
+            }
+             
         return 'hit';
         } else{
             return 'miss'
@@ -106,8 +108,7 @@ class Game {
             log.textContent = `${attacker.name} attacked ${target.name}, but the attack was evaded!`;
         } else if (result === 'hit') {
             log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
-        } else {
-            // When the target is destroyed
+        } else if (result.includes("destroyed")) {
             log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage! ${result}`;
         }
         
@@ -140,14 +141,18 @@ class Game {
         // Log both mothership attacks
         const attacker = this.currentPlayer.mothership;
         const defender = opponent.mothership;
-        const mothershipAttackResult = defender.takeDamage(attacker.attackPower, attacker.speed)
-        this.logAttack(attacker, defender, attacker.attackPower, mothershipAttackResult);
-        
-        if (this.checkWinCondition()) return;
+        if(!defender.destroyed){
+            const mothershipAttackResult = defender.takeDamage(attacker.attackPower, attacker.speed)
+            this.logAttack(attacker, defender, attacker.attackPower, mothershipAttackResult);
+            if (this.checkWinCondition()) return;
+        }
+
 
         const randomTarget = opponent.randomShip;
-        const randomTargetAttackResult = randomTarget.takeDamage(attacker.attackPower, attacker.speed);
-        this.logAttack(attacker, randomTarget, attacker.attackPower, randomTargetAttackResult);
+        if(!randomTarget.destroyed) {
+            const randomTargetAttackResult = randomTarget.takeDamage(attacker.attackPower, attacker.speed);
+            this.logAttack(attacker, randomTarget, attacker.attackPower, randomTargetAttackResult);
+        }
         
 
         // Log pending attack from selected ship, if any
@@ -213,7 +218,7 @@ class Game {
         }
     
         if (targetShip instanceof LightShip) {
-            targetShip.takeDamage(damage, attacker.speed);
+            targetShip.takeDamage(damage, attacker.speed,);
         } else {
             targetShip.takeDamage(damage, attacker.speed);
         }
