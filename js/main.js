@@ -8,18 +8,27 @@ class Ship {
     }
 
     takeDamage(damage, opponentSpeed) {
-        const hitChance = 1 - (opponentSpeed * 0.066) - 0.15
-        if(Math.random() < hitChance) {
+        const hitChance = 1 - (opponentSpeed * 0.066) - 0.15;
+        if (Math.random() < hitChance) {
+            const effectiveDamage = Math.min(damage, this.hp); // Damage dealt can't exceed remaining HP
             this.hp = Math.max(this.hp - damage, 0);
-           
+    
             if (!this.isAlive() && !this.destroyed) {
                 this.destroyed = true; // Mark the ship as destroyed
-                return `${this.name} has been destroyed`;
+                return { 
+                    status: 'destroyed', 
+                    message: `${this.name} has been destroyed after taking ${effectiveDamage} damage.`,
+                    damage: effectiveDamage 
+                };
             }
-             
-        return 'hit';
-        } else{
-            return 'miss'
+    
+            return { 
+                status: 'hit', 
+                message: `${this.name} took ${effectiveDamage} damage.`,
+                damage: effectiveDamage 
+            };
+        } else {
+            return { status: 'miss', message: `${this.name} evaded the attack!`, damage: 0 };
         }
     }
     isAlive(){
@@ -98,21 +107,10 @@ class Game {
     //     log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
     //     attackLog.appendChild(log);
     // }
-    logAttack(attacker, target, damage, result) {
+    logAttack(attacker, target, result) {
         const attackLog = document.getElementById("attackLog");
         const log = document.createElement("div");
-
-        if (result === 'miss') {
-            log.textContent = `${attacker.name} attacked ${target.name} but missed!`;
-        }else if (result === "evaded") {
-            log.textContent = `${attacker.name} attacked ${target.name}, but the attack was evaded!`;
-        } else if (result === 'hit') {
-            log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage!`;
-        } else if (result.includes("destroyed")) {
-            log.textContent = `${attacker.name} attacked ${target.name} for ${damage} damage! ${result}`;
-        }
-        
-
+        log.textContent = `${attacker.name} attacked ${target.name}: ${result}`;
         attackLog.appendChild(log);
     }
 
@@ -143,17 +141,17 @@ class Game {
         const defender = opponent.mothership;
         if(!defender.destroyed){
             const mothershipAttackResult = defender.takeDamage(attacker.attackPower, attacker.speed)
-            this.logAttack(attacker, defender, attacker.attackPower, mothershipAttackResult);
-            if (this.checkWinCondition()) return;
+            this.logAttack(attacker, defender, mothershipAttackResult.message);
         }
 
 
         const randomTarget = opponent.randomShip;
         if(!randomTarget.destroyed) {
             const randomTargetAttackResult = randomTarget.takeDamage(attacker.attackPower, attacker.speed);
-            this.logAttack(attacker, randomTarget, attacker.attackPower, randomTargetAttackResult);
+            this.logAttack(attacker, randomTarget, randomTargetAttackResult.message);
         }
         
+        if (this.checkWinCondition()) return;
 
         // Log pending attack from selected ship, if any
         if (this.pendingLogs.length > 0) {
@@ -218,14 +216,14 @@ class Game {
         }
     
         if (targetShip instanceof LightShip) {
-            targetShip.takeDamage(damage, attacker.speed,);
+            targetShip.takeDamage(damage, attacker.speed);
         } else {
             targetShip.takeDamage(damage, attacker.speed);
         }
     
         // Add the log of the selected attack to the pending logs
         this.pendingLogs.push(() => {
-            this.logAttack(attacker, targetShip, damage, attackResult);
+            this.logAttack(attacker, targetShip, attackResult.message);
         });
     
         if (this.checkWinCondition()) return;
@@ -266,12 +264,25 @@ class Game {
     }
 
     updateDOM() {
-        document.getElementById("p1MothershipHp").textContent = this.player1.mothership.hp;
-        document.getElementById("p1LightHp").textContent = this.player1.lightships.hp;
-        document.getElementById("p1HeavyHp").textContent = this.player1.heavyships.hp;
-        document.getElementById("p2MothershipHp").textContent = this.player2.mothership.hp;
-        document.getElementById("p2LightHp").textContent = this.player2.lightships.hp;
-        document.getElementById("p2HeavyHp").textContent = this.player2.heavyships.hp;
+        const updateShip = (ship, hpElementId) => {
+            const hpElement = document.getElementById(hpElementId);
+            hpElement.textContent = ship.hp;
+    
+            // Disable or gray out destroyed ships
+            if (ship.destroyed) {
+                const parentElement = hpElement.closest(".ship");
+                if (parentElement) {
+                    parentElement.classList.add("destroyed");
+                }
+            }
+        };
+    
+        updateShip(this.player1.mothership, "p1MothershipHp");
+        updateShip(this.player1.lightships, "p1LightHp");
+        updateShip(this.player1.heavyships, "p1HeavyHp");
+        updateShip(this.player2.mothership, "p2MothershipHp");
+        updateShip(this.player2.lightships, "p2LightHp");
+        updateShip(this.player2.heavyships, "p2HeavyHp");
     }
 
     start() {
