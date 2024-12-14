@@ -78,6 +78,10 @@ class Player{
         this.mothership = new Ship("Mothership", 1000, 300, 1);
         this.lightships = new Ship("Lightships", 600, 100, 5);
         this.heavyships = new Ship("Heavyships", 600, 200, 3);
+        
+        this.mothership.owner = this;
+        this.lightships.owner = this;
+        this.heavyships.owner = this;
     }
 
     get randomShip() {
