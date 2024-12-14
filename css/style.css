@@ -51,6 +51,25 @@ body {
   border-radius: 10px;
   width: 300px;
 }
+#attackLog {
+  padding: 10px; /* Add padding around the entire log container */
+  margin: 10px 0; /* Add space above and below the log container */
+  background-color: black; /* Optional: light background for better readability */
+  border: 1px solid #ccc; /* Optional: border for distinction */
+  border-radius: 5px; /* Optional: rounded edges */
+  font-family: Arial, sans-serif; /* Ensure legible font */
+  font-size: 14px; /* Adjust font size */
+}
+
+#attackLog div {
+  padding: 5px 0; /* Space between individual log entries */
+  border-bottom: 1px solid #ddd; /* Optional: line separating each log entry */
+  line-height: 1.6; /* Increase space between lines */
+}
+
+#attackLog div:last-child {
+  border-bottom: none; /* Remove the last border for a clean look */
+}
 
 button:disabled {
   opacity: 0.5;
