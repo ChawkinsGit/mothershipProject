@@ -1,9 +1,10 @@
 class Ship {
-    constructor(name, hp, attackPower, speed) {
+    constructor(name, hp, attackPower, speed, owner) {
         this.name = name;
         this.hp = hp;
         this.attackPower = attackPower;
         this.speed = speed
+        this.owner = owner
         this.destroyed = false
     }
 
@@ -75,13 +76,10 @@ class Mothership extends Ship {
 class Player{
     constructor(name) {
         this.name = name;
-        this.mothership = new Ship("Mothership", 1000, 300, 1);
-        this.lightships = new Ship("Lightships", 600, 100, 5);
-        this.heavyships = new Ship("Heavyships", 600, 200, 3);
+        this.mothership = new Ship("Mothership", 1000, 300, 1, this);
+        this.lightships = new Ship("Lightships", 600, 100, 5, this);
+        this.heavyships = new Ship("Heavyships", 600, 200, 3, this);
         
-        this.mothership.owner = this;
-        this.lightships.owner = this;
-        this.heavyships.owner = this;
     }
 
     get randomShip() {
@@ -114,7 +112,9 @@ class Game {
     logAttack(attacker, target, result) {
         const attackLog = document.getElementById("attackLog");
         const log = document.createElement("div");
-        log.textContent = `${attacker.name} attacked ${target.name}: ${result}`;
+        const attackerPlayer = attacker.owner.name;
+        const targetPlayer = target.owner.name;
+        log.textContent = `${attackerPlayer}'s ${attacker.name} attacked ${targetPlayer}'s ${target.name}: ${result}`;
         attackLog.appendChild(log);
     }
 
@@ -201,8 +201,8 @@ class Game {
         // Debugging: Log the opponent's ship details
         console.log("Target Ship Object:", targetShip);
     
-        if (!targetShip) {
-            alert(`Target ${targetType} does not exist!`);
+        if (targetShip.destroyed) {
+            alert(`The ${targetType} has already been destroyed! Please select another target.`);
             return;
         }
     
@@ -241,10 +241,12 @@ class Game {
     }
 
     switchTurn() {
+        //ADJUST THIS METHOD NEXT
         this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;
         this.selectedPlayerShip = null;
         this.selectedTarget = null;
         this.updateTurnIndicator();
+
         document.querySelectorAll(".targetBtn").forEach(btn => btn.disabled = true);
         this.mothershipAttackPhase(this.currentPlayer === this.player1 ? this.player2 : this.player1);
     }
@@ -268,8 +270,9 @@ class Game {
     }
 
     updateDOM() {
-        const updateShip = (ship, hpElementId) => {
+        const updateShip = (ship, hpElementId, buttonID) => {
             const hpElement = document.getElementById(hpElementId);
+            const buttonElement = document.getElementById(buttonId)
             hpElement.textContent = ship.hp;
     
             // Disable or gray out destroyed ships
@@ -278,15 +281,20 @@ class Game {
                 if (parentElement) {
                     parentElement.classList.add("destroyed");
                 }
+                if (buttonElement) {
+                    buttonElement.disabled = true; // Disable the button for selecting this ship
+                }
+            } else if (buttonElement) {
+                buttonElement.disabled = false; // Re-enable button if the ship is alive
             }
         };
     
-        updateShip(this.player1.mothership, "p1MothershipHp");
-        updateShip(this.player1.lightships, "p1LightHp");
-        updateShip(this.player1.heavyships, "p1HeavyHp");
-        updateShip(this.player2.mothership, "p2MothershipHp");
-        updateShip(this.player2.lightships, "p2LightHp");
-        updateShip(this.player2.heavyships, "p2HeavyHp");
+        updateShip(this.player1.mothership, "p1MothershipHp", null);
+        updateShip(this.player1.lightships, "p1LightHp", "p1Lightships");
+        updateShip(this.player1.heavyships, "p1HeavyHp", "p1Heavyships");
+        updateShip(this.player2.mothership, "p2MothershipHp", null); 
+        updateShip(this.player2.lightships, "p2LightHp", "p2Lightships");
+        updateShip(this.player2.heavyships, "p2HeavyHp", "p2Heavyships");
     }
 
     start() {
