@@ -76,9 +76,9 @@ class Mothership extends Ship {
 class Player{
     constructor(name) {
         this.name = name;
-        this.mothership = new Ship("Mothership", 1000, 300, 1, this);
-        this.lightships = new Ship("Lightships", 600, 100, 5, this);
-        this.heavyships = new Ship("Heavyships", 600, 200, 3, this);
+        this.mothership = new Ship("Mothership", 1500, 350, 1, this);
+        this.lightships = new Ship("Lightships", 750, 250, 5, this);
+        this.heavyships = new Ship("Heavyships", 1000, 175, 3, this);
         
     }
 
@@ -245,10 +245,21 @@ class Game {
         this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;
         this.selectedPlayerShip = null;
         this.selectedTarget = null;
-        this.updateTurnIndicator();
 
-        document.querySelectorAll(".targetBtn").forEach(btn => btn.disabled = true);
-        this.mothershipAttackPhase(this.currentPlayer === this.player1 ? this.player2 : this.player1);
+        this.updateTurnIndicator();
+        const opponent = this.currentPlayer === this.player1 ? this.player2 : this.player1;
+        
+        const playerLightButton = document.getElementById(this.currentPlayer === this.player1 ? "p1Lightships" : "p2Lightships");
+        const playerHeavyButton = document.getElementById(this.currentPlayer === this.player1 ? "p1Heavyships" : "p2Heavyships");
+
+        playerLightButton.disabled = this.currentPlayer.lightships.destroyed;
+        playerHeavyButton.disabled = this.currentPlayer.heavyships.destroyed;
+
+        // Disable target buttons for destroyed ships
+        document.getElementById("targetLightship").disabled = opponent.lightships.destroyed;
+        document.getElementById("targetHeavyship").disabled = opponent.heavyships.destroyed;
+
+        this.mothershipAttackPhase(opponent);
     }
 
     addEventListeners() {
@@ -272,7 +283,8 @@ class Game {
     updateDOM() {
         const updateShip = (ship, hpElementId, buttonID) => {
             const hpElement = document.getElementById(hpElementId);
-            const buttonElement = document.getElementById(buttonId)
+            const buttonElement = document.getElementById(buttonID)
+
             hpElement.textContent = ship.hp;
     
             // Disable or gray out destroyed ships
