@@ -38,7 +38,7 @@ class Ship {
 }
 
 class LightShip extends Ship {
-    constructor(name, health, attackPower, speed = 5) {
+    constructor(name, health, attackPower, speed = 10) {
         super(name, health, attackPower);
         this.speed = speed
         this.dodgeChance = 0.15; // 15% chance to dodge
@@ -76,9 +76,9 @@ class Mothership extends Ship {
 class Player{
     constructor(name) {
         this.name = name;
-        this.mothership = new Ship("Mothership", 1500, 350, 1, this);
-        this.lightships = new Ship("Lightships", 750, 250, 5, this);
-        this.heavyships = new Ship("Heavyships", 1000, 175, 3, this);
+        this.mothership = new Ship("Mothership", 1500, 350, 2, this);
+        this.lightships = new Ship("Lightships", 1600, 175, 8, this);
+        this.heavyships = new Ship("Heavyships", 1400, 250, 4, this);
         
     }
 
@@ -101,6 +101,12 @@ class Game {
 
     updateTurnIndicator() {
         document.getElementById("turnIndicator").textContent = this.currentPlayer.name;
+    
+        const isPlayer1Turn = this.currentPlayer === this.player1;
+        document.getElementById("p1Lightships").disabled = !isPlayer1Turn;
+        document.getElementById("p1Heavyships").disabled = !isPlayer1Turn;
+        document.getElementById("p2Lightships").disabled = isPlayer1Turn;
+        document.getElementById("p2Heavyships").disabled = isPlayer1Turn;
     }
 
     // logAttack(attacker, target, damage) {
@@ -112,11 +118,18 @@ class Game {
     logAttack(attacker, target, result) {
         const attackLog = document.getElementById("attackLog");
         const log = document.createElement("div");
+        log.className = "log-entry"
         const attackerPlayer = attacker.owner.name;
         const targetPlayer = target.owner.name;
         log.textContent = `${attackerPlayer}'s ${attacker.name} attacked ${targetPlayer}'s ${target.name}: ${result}`;
-        attackLog.appendChild(log);
-    }
+      
+            if (attackLog.firstChild) {
+                attackLog.insertBefore(log, attackLog.firstChild);
+            } else {
+                attackLog.appendChild(log);
+            }
+        }
+
 
     clearLog() {
         document.getElementById("attackLog").innerHTML = ""; // Clear previous log entries
@@ -262,18 +275,48 @@ class Game {
         this.mothershipAttackPhase(opponent);
     }
 
+
     addEventListeners() {
+        // Player 1's ships
         document.getElementById("p1Lightships").addEventListener("click", () => {
-            if (this.currentPlayer === this.player1) this.selectPlayerShip("lightships");
+            if (this.currentPlayer === this.player1) {
+                this.selectPlayerShip("lightships");
+            } else {
+                alert("It's not your turn! Wait for your turn to select your ships.");
+            }
         });
+    
         document.getElementById("p1Heavyships").addEventListener("click", () => {
-            if (this.currentPlayer === this.player1) this.selectPlayerShip("heavyships");
+            if (this.currentPlayer === this.player1) {
+                this.selectPlayerShip("heavyships");
+            } else {
+                alert("It's not your turn! Wait for your turn to select your ships.");
+            }
         });
+    
+        // Player 2's ships
         document.getElementById("p2Lightships").addEventListener("click", () => {
-            if (this.currentPlayer === this.player2) this.selectPlayerShip("lightships");
+            if (this.currentPlayer === this.player2) {
+                this.selectPlayerShip("lightships");
+            } else {
+                alert("It's not your turn! Wait for your turn to select your ships.");
+            }
         });
+    
         document.getElementById("p2Heavyships").addEventListener("click", () => {
-            if (this.currentPlayer === this.player2) this.selectPlayerShip("heavyships");
+            if (this.currentPlayer === this.player2) {
+                this.selectPlayerShip("heavyships");
+            } else {
+                alert("It's not your turn! Wait for your turn to select your ships.");
+            }
+        });
+        
+        document.getElementById("p1Mothership").addEventListener("click", () => {
+            alert("The mothership acts automatically and cannot be selected for actions.");
+        });
+    
+        document.getElementById("p2Mothership").addEventListener("click", () => {
+            alert("The mothership acts automatically and cannot be selected for actions.");
         });
 
         document.getElementById("targetLightship").addEventListener("click", () => this.selectTarget("lightships"));
@@ -316,3 +359,12 @@ class Game {
 
 const game = new Game();
 game.start();
+
+
+// UI display when button selected for actions that do nothing
+//start button
+//turn order oldest info should be at the top
+//restrict player from clicking the same ship to attack more than once
+//buttons should change color when selected for attack
+//reset or play new game button
+// Tinker with lightship evading and dodging chances
