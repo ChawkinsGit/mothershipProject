@@ -88,12 +88,13 @@ class Player{
 }
 
 class Game {
-    constructor() {
-        this.player1 = new Player("Player 1");
-        this.player2 = new Player("Player 2");
+    constructor(player1Name, player2Name) {
+        this.player1 = new Player(player1Name);
+        this.player2 = new Player(player2Name);
         this.currentPlayer = Math.random() < 0.5 ? this.player1 : this.player2;
         this.selectedPlayerShip = null;
         this.selectedTarget = null;
+        this.attackShipSelected = false;
         this.pendingLogs = [];
         this.updateTurnIndicator();
         this.addEventListeners();
@@ -184,8 +185,13 @@ class Game {
     }
 
     selectPlayerShip(shipType) {
+        if (this.attackShipSelected) {
+            alert("A ship has already been selected for this turn.");
+            return;
+        } 
         if (shipType === "lightships" || shipType === "heavyships") {
             this.selectedPlayerShip = shipType;
+            this.attackShipSelected = true;
             document.querySelectorAll(".targetBtn").forEach(btn => btn.disabled = false);
 
             const attackLog = document.getElementById("attackLog");
@@ -258,7 +264,7 @@ class Game {
         this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;
         this.selectedPlayerShip = null;
         this.selectedTarget = null;
-
+        this.attackShipSelected = false;
         this.updateTurnIndicator();
         const opponent = this.currentPlayer === this.player1 ? this.player2 : this.player1;
         
@@ -356,15 +362,32 @@ class Game {
         this.mothershipAttackPhase(this.currentPlayer === this.player1 ? this.player2 : this.player1);
     }
 }
+document.getElementById('engage-btn').addEventListener('click', function() {
+    let player1Name = document.getElementById('person1').value.trim();
+    let player2Name = document.getElementById('person2').value.trim();
 
-const game = new Game();
-game.start();
 
+    if (player1Name === '' || player2Name === '') {
+        alert("Please enter names for both players!");
+        return;
+    }
+    // Check if both player names are entered
+    if (player1Name !== '' && player2Name !== '') {
+        document.getElementById('player1').innerHTML = `${player1Name}`;
+        document.getElementById('player2').innerHTML = `${player2Name}`;
+     // Hide player section
+        document.getElementById('player-section').style.display = 'none';
+        document.getElementById('game').style.display = 'flex'
+        
+    }
+    const game = new Game(player1Name, player2Name);
+    game.start();
+  });
 
-// UI display when button selected for actions that do nothing
+// UI display when button selected for actions that do nothing ***DONE***
 //start button
-//turn order oldest info should be at the top
+//turn order oldest info should be at the top ***DONE***
 //restrict player from clicking the same ship to attack more than once
 //buttons should change color when selected for attack
 //reset or play new game button
-// Tinker with lightship evading and dodging chances
+// Tinker with lightship evading and dodging chances ***DONE***

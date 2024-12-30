@@ -13,6 +13,7 @@ body {
   display: flex;
   gap: 20px;
   text-align: center;
+  display: none;
 }
 
 #player1, #player2 {
@@ -78,4 +79,14 @@ button:disabled {
 .destroyed {
   opacity: 0.5;
   pointer-events: none;
+}
+
+section{
+  display: flex;
+  justify-content: center;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+input{
+  margin: 1%;
 }
