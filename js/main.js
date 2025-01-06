@@ -1,3 +1,6 @@
+let player1Name = document.getElementById('person1')
+let player2Name = document.getElementById('person2')
+const engage = document.getElementById("engage-btn")
 class Ship {
     constructor(name, hp, attackPower, speed, owner) {
         this.name = name;
@@ -79,7 +82,6 @@ class Player{
         this.mothership = new Ship("Mothership", 1500, 350, 2, this);
         this.lightships = new Ship("Lightships", 1600, 175, 8, this);
         this.heavyships = new Ship("Heavyships", 1400, 250, 4, this);
-        
     }
 
     get randomShip() {
@@ -88,9 +90,10 @@ class Player{
 }
 
 class Game {
-    constructor() {
-        this.player1 = new Player("Player 1");
-        this.player2 = new Player("Player 2");
+    constructor(player1Name, player2Name) {
+        console.log("Received player names:", player1Name, player2Name)
+        this.player1 = new Player(player1Name);
+        this.player2 = new Player(player2Name);
         this.currentPlayer = Math.random() < 0.5 ? this.player1 : this.player2;
         this.selectedPlayerShip = null;
         this.selectedTarget = null;
@@ -98,6 +101,7 @@ class Game {
         this.updateTurnIndicator();
         this.addEventListeners();
     }
+   
 
     updateTurnIndicator() {
         document.getElementById("turnIndicator").textContent = this.currentPlayer.name;
@@ -327,7 +331,7 @@ class Game {
         const updateShip = (ship, hpElementId, buttonID) => {
             const hpElement = document.getElementById(hpElementId);
             const buttonElement = document.getElementById(buttonID)
-
+            console.log(document.querySelector(`#${hpElementId}`));
             hpElement.textContent = ship.hp;
     
             // Disable or gray out destroyed ships
@@ -357,10 +361,42 @@ class Game {
     }
 }
 
-const game = new Game();
-game.start();
+
+// const game = new Game(player1Name, player2Name);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mothership = document.getElementById("p1Mothership")
+    if(mothership) {
+        mothership.addEventListener('click', () =>{
+            console.log("Mothership clicked!")
+        });
+    }else {
+        console.error("Mothership element not found")
+    }
+    engage.addEventListener('click', () =>{
+        const p1Name = player1Name.value.trim()
+        const p2Name = player2Name.value.trim()
 
 
+        if (player1Name === '' || player2Name === '') {
+            alert("Please enter names for both players!");
+            return;
+        }
+        
+        // Check if both player names are entered
+        if (player1Name !== '' && player2Name !== '') {
+            document.getElementById('player1').textContent = p1Name;
+            document.getElementById('player2').textContent = p2Name;
+        // Hide player section
+            document.getElementById('player-section').style.display = 'none';
+            document.getElementById('game').style.display = 'flex'
+            const game = new Game(p1Name, p2Name);
+            game.start()
+        }
+        
+
+    });
+})
 // UI display when button selected for actions that do nothing
 //start button
 //turn order oldest info should be at the top
@@ -368,3 +404,11 @@ game.start();
 //buttons should change color when selected for attack
 //reset or play new game button
 // Tinker with lightship evading and dodging chances
+
+
+/*main.js:110 Uncaught TypeError: Cannot set properties of null (setting 'disabled')
+at Game.updateTurnIndicator (main.js:110:58)
+at new Game (main.js:101:14)
+at HTMLButtonElement.<anonymous> (main.js:393:26)
+FIGURE OUT why the game will not run from here.
+*/

@@ -9,8 +9,15 @@ body {
   color: #fff;
 }
 
-#game {
+section{
   display: flex;
+  gap: 10px; 
+  justify-content: center;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+#game {
+  display: none;
   gap: 20px;
   text-align: center;
 }
