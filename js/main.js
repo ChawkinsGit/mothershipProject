@@ -1,6 +1,6 @@
-let player1Name = document.getElementById('person1')
-let player2Name = document.getElementById('person2')
-const engage = document.getElementById("engage-btn")
+const engage = document.querySelector('#engage-btn')  
+const player1Name = document.querySelector('#person1')
+const player2Name = document.querySelector('#person2')
 class Ship {
     constructor(name, hp, attackPower, speed, owner) {
         this.name = name;
@@ -362,7 +362,7 @@ class Game {
 }
 
 
-// const game = new Game(player1Name, player2Name);
+const game = new Game(player1Name, player2Name);
 
 document.addEventListener('DOMContentLoaded', () => {
     const mothership = document.getElementById("p1Mothership")
@@ -390,11 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide player section
             document.getElementById('player-section').style.display = 'none';
             document.getElementById('game').style.display = 'flex'
-            const game = new Game(p1Name, p2Name);
+
             game.start()
         }
-        
-
+    
     });
 })
 // UI display when button selected for actions that do nothing
