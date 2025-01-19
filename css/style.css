@@ -17,7 +17,7 @@ section{
   align-items: center;
 }
 #game {
-  display: flex;
+  display: none;
   gap: 20px;
   text-align: center;
 }

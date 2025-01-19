@@ -12,18 +12,18 @@
         <h1>Welcome to Shinobu's BattleField</h1>
         <input type="text" id="person1" placeholder="Enter Player 1">
         <input type="text" id="person2" placeholder="Enter Player 2">
-        <button id="engage-btn">Engage</button>
+        <button id="engage-btn" onclick="startGame()">Engage</button>
       </section>
 	<div id="game">
         <div id="player1">
-            <h2>Player 1</h2>
+            <h2 class="player-name">Player 1</h2>
             <button class="ship" id="p1Mothership">Mothership (HP: <span id="p1MothershipHp">1000</span>)</button>
             <button class="ship" id="p1Lightships">Lightships (HP: <span id="p1LightHp">600</span>)</button>
             <button class="ship" id="p1Heavyships">Heavyships (HP: <span id="p1HeavyHp">600</span>)</button>
         </div>
 
         <div id="player2">
-            <h2>Player 2</h2>
+            <h2 class="player-name">Player 2</h2>
             <button class="ship" id="p2Mothership">Mothership (HP: <span id="p2MothershipHp">1000</span>)</button>
             <button class="ship" id="p2Lightships">Lightships (HP: <span id="p2LightHp">600</span>)</button>
             <button class="ship" id="p2Heavyships">Heavyships (HP: <span id="p2HeavyHp">600</span>)</button>

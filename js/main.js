@@ -1,6 +1,15 @@
 const engage = document.querySelector('#engage-btn')  
 const player1Name = document.querySelector('#person1')
 const player2Name = document.querySelector('#person2')
+const p1MotherShip = document.querySelector('#p1Mothership')
+const p1LightShip = document.querySelector('#p1Lightships')
+const p1HeavyShip = document.querySelector('#p1Heavyships')
+const targetLightShip = document.querySelector('#targetLightship')
+const targetHeavyShip = document.querySelector('#targetHeavyship')
+const p2MotherShip = document.querySelector('#p2Mothership')
+const p2LightShips = document.querySelector('#p2Lightships')
+const p2Heavyships = document.querySelector('#p2Heavyships')
+
 class Ship {
     constructor(name, hp, attackPower, speed, owner) {
         this.name = name;
@@ -107,10 +116,10 @@ class Game {
         document.getElementById("turnIndicator").textContent = this.currentPlayer.name;
     
         const isPlayer1Turn = this.currentPlayer === this.player1;
-        document.getElementById("p1Lightships").disabled = !isPlayer1Turn;
-        document.getElementById("p1Heavyships").disabled = !isPlayer1Turn;
-        document.getElementById("p2Lightships").disabled = isPlayer1Turn;
-        document.getElementById("p2Heavyships").disabled = isPlayer1Turn;
+        p1LightShip.disabled = !isPlayer1Turn;
+        p1HeavyShip.disabled = !isPlayer1Turn;
+        p2LightShips.disabled = isPlayer1Turn;
+        p2Heavyships.disabled = isPlayer1Turn;
     }
 
     // logAttack(attacker, target, damage) {
@@ -273,8 +282,8 @@ class Game {
         playerHeavyButton.disabled = this.currentPlayer.heavyships.destroyed;
 
         // Disable target buttons for destroyed ships
-        document.getElementById("targetLightship").disabled = opponent.lightships.destroyed;
-        document.getElementById("targetHeavyship").disabled = opponent.heavyships.destroyed;
+        targetLightShip.disabled = opponent.lightships.destroyed;
+        targetHeavyShip.disabled = opponent.heavyships.destroyed;
 
         this.mothershipAttackPhase(opponent);
     }
@@ -282,7 +291,7 @@ class Game {
 
     addEventListeners() {
         // Player 1's ships
-        document.getElementById("p1Lightships").addEventListener("click", () => {
+        p1LightShip.addEventListener("click", () => {
             if (this.currentPlayer === this.player1) {
                 this.selectPlayerShip("lightships");
             } else {
@@ -290,7 +299,7 @@ class Game {
             }
         });
     
-        document.getElementById("p1Heavyships").addEventListener("click", () => {
+        p1HeavyShip.addEventListener("click", () => {
             if (this.currentPlayer === this.player1) {
                 this.selectPlayerShip("heavyships");
             } else {
@@ -299,7 +308,7 @@ class Game {
         });
     
         // Player 2's ships
-        document.getElementById("p2Lightships").addEventListener("click", () => {
+        p2LightShips.addEventListener("click", () => {
             if (this.currentPlayer === this.player2) {
                 this.selectPlayerShip("lightships");
             } else {
@@ -307,7 +316,7 @@ class Game {
             }
         });
     
-        document.getElementById("p2Heavyships").addEventListener("click", () => {
+        p2Heavyships.addEventListener("click", () => {
             if (this.currentPlayer === this.player2) {
                 this.selectPlayerShip("heavyships");
             } else {
@@ -315,16 +324,16 @@ class Game {
             }
         });
         
-        document.getElementById("p1Mothership").addEventListener("click", () => {
+        p1MotherShip.addEventListener("click", () => {
             alert("The mothership acts automatically and cannot be selected for actions.");
         });
     
-        document.getElementById("p2Mothership").addEventListener("click", () => {
+        p2MotherShip.addEventListener("click", () => {
             alert("The mothership acts automatically and cannot be selected for actions.");
         });
 
-        document.getElementById("targetLightship").addEventListener("click", () => this.selectTarget("lightships"));
-        document.getElementById("targetHeavyship").addEventListener("click", () => this.selectTarget("heavyships"));
+        targetLightShip.addEventListener("click", () => this.selectTarget("lightships"));
+        targetHeavyShip.addEventListener("click", () => this.selectTarget("heavyships"));
     }
 
     updateDOM() {
@@ -332,8 +341,23 @@ class Game {
             const hpElement = document.getElementById(hpElementId);
             const buttonElement = document.getElementById(buttonID)
             console.log(document.querySelector(`#${hpElementId}`));
-            hpElement.textContent = ship.hp;
-    
+            console.log(ship);
+            console.log(document.querySelector(`#${buttonID}`));
+
+            // hpElement.textContent = ship.hp;
+
+            if (hpElement && ship && ship.hp !== undefined) {
+                hpElement.textContent = ship.hp;
+            } else {
+                console.error(`Element with ID "${hpElementId}" or ship.hp not found.`);
+            }
+
+            if (buttonElement) {
+                // Example: Add event listener or other logic for the button
+                buttonElement.addEventListener('click', () => {
+                    console.log(`${ship.hp} HP button clicked`);
+                });
+            }
             // Disable or gray out destroyed ships
             if (ship.destroyed) {
                 const parentElement = hpElement.closest(".ship");
@@ -357,45 +381,66 @@ class Game {
     }
 
     start() {
+
         this.mothershipAttackPhase(this.currentPlayer === this.player1 ? this.player2 : this.player1);
     }
 }
 
 
-const game = new Game(player1Name, player2Name);
 
-document.addEventListener('DOMContentLoaded', () => {
-    const mothership = document.getElementById("p1Mothership")
-    if(mothership) {
-        mothership.addEventListener('click', () =>{
-            console.log("Mothership clicked!")
-        });
-    }else {
-        console.error("Mothership element not found")
-    }
-    engage.addEventListener('click', () =>{
+function startGame() {
         const p1Name = player1Name.value.trim()
         const p2Name = player2Name.value.trim()
 
 
-        if (player1Name === '' || player2Name === '') {
+        if (p1Name === '' || p2Name === '') {
             alert("Please enter names for both players!");
             return;
         }
         
         // Check if both player names are entered
-        if (player1Name !== '' && player2Name !== '') {
-            document.getElementById('player1').textContent = p1Name;
-            document.getElementById('player2').textContent = p2Name;
+        if (p1Name !== '' && p2Name !== '') {
+            document.querySelector('#player1 .player-name').innerText = p1Name;
+            document.querySelector('#player2 .player-name').innerText = p2Name;
         // Hide player section
             document.getElementById('player-section').style.display = 'none';
-            document.getElementById('game').style.display = 'flex'
-
+            const game = new Game(p1Name, p2Name);
             game.start()
+            document.getElementById('game').style.display = 'flex'
         }
+}
+// document.addEventListener('DOMContentLoaded', () => {
+//     const mothership = document.getElementById("p1Mothership")
+//     if(mothership) {
+//         mothership.addEventListener('click', () =>{
+//             console.log("Mothership clicked!")
+//         });
+//     }else {
+//         console.error("Mothership element not found")
+//     }
+//     engage.addEventListener('click', () =>{
+//         const p1Name = player1Name.value.trim()
+//         const p2Name = player2Name.value.trim()
+
+
+//         if (player1Name === '' || player2Name === '') {
+//             alert("Please enter names for both players!");
+//             return;
+//         }
+        
+//         // Check if both player names are entered
+//         if (player1Name !== '' && player2Name !== '') {
+//             document.getElementById('player1').textContent = p1Name;
+//             document.getElementById('player2').textContent = p2Name;
+//         // Hide player section
+//             document.getElementById('player-section').style.display = 'none';
+//             document.getElementById('game').style.display = 'flex'
+//             const game = new Game(player1Name, player2Name);
+//             game.start()
+//         }
     
-    });
-})
+//     });
+// })
 // UI display when button selected for actions that do nothing
 //start button
 //turn order oldest info should be at the top
